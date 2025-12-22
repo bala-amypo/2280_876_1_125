@@ -1,5 +1,5 @@
 @Entity
-public class ProfitCalculation {
+public class ProfitCalculationRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
