@@ -1,53 +1,50 @@
- package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
+import com.example.demo.entity.MenuItem;
+import com.example.demo.entity.ProfitCalculation;
+import com.example.demo.entity.RecipeIngredient;
+import com.example.demo.repository.MenuItemRepository;
+import com.example.demo.repository.ProfitCalculationRepository;
+import com.example.demo.repository.RecipeIngredientRepository;
+import com.example.demo.service.ProfitCalculationService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ProfitCalculationServiceImpl implements ProfitCalculationService {
 
     private final MenuItemRepository menuRepo;
     private final RecipeIngredientRepository recipeRepo;
     private final ProfitCalculationRepository profitRepo;
 
-    public ProfitCalculationServiceImpl(
-            MenuItemRepository menuRepo,
-            RecipeIngredientRepository recipeRepo,
-            ProfitCalculationRepository profitRepo) {
-        this.menuRepo = menuRepo;
-        this.recipeRepo = recipeRepo;
-        this.profitRepo = profitRepo;
-    }
-
     @Override
     public ProfitCalculation calculateProfit(Long menuItemId) {
-        MenuItem menuItem = menuRepo.findById(menuItemId)
-                .orElseThrow(() -> new RuntimeException("MenuItem not found"));
+        MenuItem menuItem = menuRepo.findById(menuItemId).orElseThrow();
 
-        double cost = recipeRepo.findByMenuItemId(menuItemId)
-                .stream()
-                .mapToDouble(r ->
-                        r.getQuantity() * r.getIngredient().getCostPerUnit())
+        List<RecipeIngredient> ingredients = recipeRepo.findByMenuItemId(menuItemId);
+
+        double totalCost = ingredients.stream()
+                .mapToDouble(i -> i.getIngredient().getCost() * i.getQuantity())
                 .sum();
 
-        double profit = menuItem.getSellingPrice() - cost;
+        double profit = menuItem.getSellingPrice() - totalCost;
 
-        ProfitCalculation pc = new ProfitCalculation();
-        pc.setMenuItem(menuItem);
-        pc.setTotalCost(cost);
-        pc.setProfit(profit);
+        ProfitCalculation calc = new ProfitCalculation();
+        calc.setMenuItem(menuItem);
+        calc.setCost(totalCost);
+        calc.setProfit(profit);
 
-        return profitRepo.save(pc);
+        return profitRepo.save(calc);
     }
 
     @Override
     public ProfitCalculation getCalculationById(Long id) {
-        return profitRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Calculation not found"));
+        return profitRepo.findById(id).orElseThrow();
     }
 
     @Override

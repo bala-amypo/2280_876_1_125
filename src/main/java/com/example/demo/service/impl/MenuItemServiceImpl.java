@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import java.util.List;
 
@@ -6,15 +6,15 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.MenuItem;
 import com.example.demo.repository.MenuItemRepository;
+import com.example.demo.service.MenuItemService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class MenuItemServiceImpl implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
-
-    public MenuItemServiceImpl(MenuItemRepository menuItemRepository) {
-        this.menuItemRepository = menuItemRepository;
-    }
 
     @Override
     public MenuItem createMenuItem(MenuItem item) {
