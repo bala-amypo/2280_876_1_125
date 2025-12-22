@@ -1,14 +1,9 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(
-    name = "categories",
-    uniqueConstraints = @UniqueConstraint(columnNames = "name")
-)
+@Table(name = "categories")
 public class Category {
 
     @Id
@@ -18,8 +13,27 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "categories")
-    private List<MenuItem> menuItems = new ArrayList<>();
+    // constructors
+    public Category() {}
+
+    public Category(String name) {
+        this.name = name;
+    }
 
     // getters & setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
