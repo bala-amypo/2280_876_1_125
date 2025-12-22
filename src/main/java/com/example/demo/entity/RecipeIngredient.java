@@ -1,15 +1,25 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+
 @Entity
+@Table(name = "recipe_ingredients")
 public class RecipeIngredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "menu_item_id")
     private MenuItem menuItem;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    private Double quantityRequired;
+    @Column(nullable = false)
+    private Double quantity;
+
+    // getters & setters
 }
