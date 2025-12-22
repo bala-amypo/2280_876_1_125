@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import java.util.List;
 
@@ -6,15 +6,15 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Ingredient;
 import com.example.demo.repository.IngredientRepository;
+import com.example.demo.service.IngredientService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
-
-    public IngredientServiceImpl(IngredientRepository ingredientRepository) {
-        this.ingredientRepository = ingredientRepository;
-    }
 
     @Override
     public Ingredient createIngredient(Ingredient ingredient) {
@@ -26,7 +26,7 @@ public class IngredientServiceImpl implements IngredientService {
     public Ingredient updateIngredient(Long id, Ingredient ingredient) {
         Ingredient existing = getIngredientById(id);
         existing.setName(ingredient.getName());
-        existing.setCostPerUnit(ingredient.getCostPerUnit());
+        existing.setCost(ingredient.getCost());
         return ingredientRepository.save(existing);
     }
 
