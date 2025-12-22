@@ -1,8 +1,3 @@
-package com.example.demo.service;
-
-import java.util.List;
-import com.example.demo.entity.ProfitCalculation;
-
 public interface ProfitCalculationService {
 
     ProfitCalculation calculateProfit(Long menuItemId);
