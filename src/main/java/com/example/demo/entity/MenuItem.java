@@ -1,16 +1,12 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Set;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class MenuItem {
 
     @Id
@@ -18,30 +14,12 @@ public class MenuItem {
     private Long id;
 
     private String name;
-    private String description;
-    private BigDecimal sellingPrice;
-    private Boolean active = true;
 
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private Double sellingPrice;
 
-    @ManyToMany
-    @JoinTable(
-        name = "menu_item_category",
-        joinColumns = @JoinColumn(name = "menu_item_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private Set<Category> categories;
+    private boolean active = true;
 
-    @PrePersist
-    void onCreate() {
-        createdAt = new Timestamp(System.currentTimeMillis());
-    }
-
-    @PreUpdate
-    void onUpdate() {
-        updatedAt = new Timestamp(System.currentTimeMillis());
-    }
-
-    // getters & setters
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;   //  THIS WAS MISSING
 }
