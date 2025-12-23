@@ -1,43 +1,43 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.entity.MenuItem;
 import com.example.demo.service.MenuItemService;
+import org.springframework.web.bind.annotation.*;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/menu-items")
-@RequiredArgsConstructor
 public class MenuItemController {
 
-    private final MenuItemService menuItemService;
+    private final MenuItemService service;
+
+    public MenuItemController(MenuItemService service) {
+        this.service = service;
+    }
 
     @PostMapping
-    public MenuItem create(@RequestBody MenuItem item) {
-        return menuItemService.createMenuItem(item);
-    }
-
-    @PutMapping("/{id}")
-    public MenuItem update(@PathVariable Long id, @RequestBody MenuItem item) {
-        return menuItemService.updateMenuItem(id, item);
-    }
-
-    @GetMapping("/{id}")
-    public MenuItem get(@PathVariable Long id) {
-        return menuItemService.getMenuItemById(id);
+    public MenuItem create(@RequestBody MenuItem menuItem) {
+        return service.createMenuItem(menuItem);
     }
 
     @GetMapping
     public List<MenuItem> getAll() {
-        return menuItemService.getAllMenuItems();
+        return service.getAllMenuItems();
+    }
+
+    @GetMapping("/{id}")
+    public MenuItem getById(@PathVariable Long id) {
+        return service.getMenuItemById(id);
+    }
+
+    @PutMapping("/{id}")
+    public MenuItem update(@PathVariable Long id, @RequestBody MenuItem menuItem) {
+        return service.updateMenuItem(id, menuItem);
     }
 
     @PutMapping("/{id}/deactivate")
     public void deactivate(@PathVariable Long id) {
-        menuItemService.deactivateMenuItem(id);
+        service.deactivateMenuItem(id);
     }
 }

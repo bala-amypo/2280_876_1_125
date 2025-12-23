@@ -3,46 +3,42 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.MenuItem;
 import com.example.demo.repository.MenuItemRepository;
 import com.example.demo.service.MenuItemService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class MenuItemServiceImpl implements MenuItemService {
 
-    private final MenuItemRepository menuItemRepository;
+    private final MenuItemRepository repository;
 
-    @Override
+    public MenuItemServiceImpl(MenuItemRepository repository) {
+        this.repository = repository;
+    }
+
     public MenuItem createMenuItem(MenuItem menuItem) {
-        return menuItemRepository.save(menuItem);
+        return repository.save(menuItem);
     }
 
-    @Override
     public MenuItem updateMenuItem(Long id, MenuItem menuItem) {
-        MenuItem existing = getMenuItemById(id);
+        MenuItem existing = repository.findById(id).orElseThrow();
         existing.setName(menuItem.getName());
+        existing.setDescription(menuItem.getDescription());
         existing.setSellingPrice(menuItem.getSellingPrice());
-        existing.setCategory(menuItem.getCategory());
-        return menuItemRepository.save(existing);
+        return repository.save(existing);
     }
 
-    @Override
     public MenuItem getMenuItemById(Long id) {
-        return menuItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Menu item not found"));
+        return repository.findById(id).orElseThrow();
     }
 
-    @Override
     public List<MenuItem> getAllMenuItems() {
-        return menuItemRepository.findAll();
+        return repository.findAll();
     }
 
-    @Override
     public void deactivateMenuItem(Long id) {
-        MenuItem menuItem = getMenuItemById(id);
+        MenuItem menuItem = repository.findById(id).orElseThrow();
         menuItem.setActive(false);
-        menuItemRepository.save(menuItem);
+        repository.save(menuItem);
     }
 }

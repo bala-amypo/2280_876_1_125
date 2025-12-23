@@ -1,70 +1,36 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Ingredient;
-import com.example.demo.entity.MenuItem;
 import com.example.demo.entity.RecipeIngredient;
-import com.example.demo.repository.IngredientRepository;
-import com.example.demo.repository.MenuItemRepository;
 import com.example.demo.repository.RecipeIngredientRepository;
 import com.example.demo.service.RecipeIngredientService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class RecipeIngredientServiceImpl implements RecipeIngredientService {
 
-    private final RecipeIngredientRepository recipeIngredientRepository;
-    private final MenuItemRepository menuItemRepository;
-    private final IngredientRepository ingredientRepository;
+    private final RecipeIngredientRepository repository;
 
-    @Override
-    public RecipeIngredient addIngredientToRecipe(Long menuItemId, Long ingredientId, Double quantity) {
-        MenuItem menuItem = menuItemRepository.findById(menuItemId)
-                .orElseThrow(() -> new RuntimeException("MenuItem not found"));
-
-        Ingredient ingredient = ingredientRepository.findById(ingredientId)
-                .orElseThrow(() -> new RuntimeException("Ingredient not found"));
-
-        RecipeIngredient recipeIngredient = new RecipeIngredient();
-        recipeIngredient.setMenuItem(menuItem);
-        recipeIngredient.setIngredient(ingredient);
-        recipeIngredient.setQuantityRequired(quantity);
-
-        return recipeIngredientRepository.save(recipeIngredient);
+    public RecipeIngredientServiceImpl(RecipeIngredientRepository repository) {
+        this.repository = repository;
     }
 
-    @Override
-    public RecipeIngredient updateRecipeIngredient(Long id, Double quantity) {
-        RecipeIngredient recipeIngredient = recipeIngredientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("RecipeIngredient not found"));
-        recipeIngredient.setQuantityRequired(quantity);
-        return recipeIngredientRepository.save(recipeIngredient);
+    public RecipeIngredient addRecipeIngredient(RecipeIngredient recipeIngredient) {
+        return repository.save(recipeIngredient);
     }
 
-    @Override
-    public List<RecipeIngredient> getIngredientsByMenuItem(Long menuItemId) {
-        MenuItem menuItem = menuItemRepository.findById(menuItemId)
-                .orElseThrow(() -> new RuntimeException("MenuItem not found"));
-        return recipeIngredientRepository.findByMenuItem(menuItem);
+    public RecipeIngredient updateQuantity(Long id, Double quantity) {
+        RecipeIngredient ri = repository.findById(id).orElseThrow();
+        ri.setQuantityRequired(quantity);
+        return repository.save(ri);
     }
 
-    @Override
-    public void removeIngredientFromRecipe(Long id) {
-        if (!recipeIngredientRepository.existsById(id)) {
-            throw new RuntimeException("RecipeIngredient not found");
-        }
-        recipeIngredientRepository.deleteById(id);
+    public List<RecipeIngredient> getByMenuItem(Long menuItemId) {
+        return repository.findByMenuItemId(menuItemId);
     }
 
-    @Override
-    public Double getTotalQuantityOfIngredient(Long ingredientId) {
-        Ingredient ingredient = ingredientRepository.findById(ingredientId)
-                .orElseThrow(() -> new RuntimeException("Ingredient not found"));
-        return recipeIngredientRepository.findByIngredient(ingredient).stream()
-                .mapToDouble(RecipeIngredient::getQuantityRequired)
-                .sum();
+    public void deleteRecipeIngredient(Long id) {
+        repository.deleteById(id);
     }
 }
