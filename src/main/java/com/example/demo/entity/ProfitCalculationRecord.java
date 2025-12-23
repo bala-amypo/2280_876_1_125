@@ -2,13 +2,8 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import lombok.*;
+
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class ProfitCalculationRecord {
 
     @Id
@@ -19,13 +14,17 @@ public class ProfitCalculationRecord {
     private MenuItem menuItem;
 
     private BigDecimal totalCost;
-    private BigDecimal profitMargin;
-    private Timestamp calculatedAt;
+    private Double profitMargin;
 
-    @PrePersist
-    void onCreate() {
-        calculatedAt = new Timestamp(System.currentTimeMillis());
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    // getters & setters
+    public MenuItem getMenuItem() { return menuItem; }
+    public void setMenuItem(MenuItem menuItem) { this.menuItem = menuItem; }
+
+    public BigDecimal getTotalCost() { return totalCost; }
+    public void setTotalCost(BigDecimal totalCost) { this.totalCost = totalCost; }
+
+    public Double getProfitMargin() { return profitMargin; }
+    public void setProfitMargin(Double profitMargin) { this.profitMargin = profitMargin; }
 }
