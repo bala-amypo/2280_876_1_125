@@ -19,9 +19,6 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient createIngredient(Ingredient ingredient) {
-        if (ingredient.getCostPerUnit().signum() <= 0) {
-            throw new RuntimeException("Cost per unit must be positive");
-        }
         ingredient.setActive(true);
         return ingredientRepository.save(ingredient);
     }
@@ -29,11 +26,9 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public Ingredient updateIngredient(Long id, Ingredient ingredient) {
         Ingredient existing = getIngredientById(id);
-
         existing.setName(ingredient.getName());
         existing.setUnit(ingredient.getUnit());
         existing.setCostPerUnit(ingredient.getCostPerUnit());
-
         return ingredientRepository.save(existing);
     }
 

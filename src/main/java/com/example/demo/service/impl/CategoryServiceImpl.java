@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Category;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.service.CategoryService;
 
@@ -23,21 +24,21 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public Category updateCategory(Long id, Category category) {
+        Category existing = getCategoryById(id);
+        existing.setName(category.getName());
+        return categoryRepository.save(existing);
     }
 
     @Override
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     @Override
-    public Category updateCategory(Long id, Category category) {
-        Category existing = getCategoryById(id);
-        existing.setName(category.getName());
-        return categoryRepository.save(existing);
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
     }
 
     @Override
