@@ -1,8 +1,9 @@
 package com.example.demo.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -32,9 +33,12 @@ public class ProfitCalculationServiceImpl implements ProfitCalculationService {
         MenuItem menu = menuItemRepository.findById(menuItemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Menu item not found"));
 
-        List<RecipeIngredient> recipes = recipeIngredientRepository.findByMenuItem(menu);
-        BigDecimal totalCost = BigDecimal.ZERO;
+        List<RecipeIngredient> recipes = recipeIngredientRepository.findAll()
+                .stream()
+                .filter(r -> r.getMenuItem().getId().equals(menuItemId))
+                .collect(Collectors.toList());
 
+        BigDecimal totalCost = BigDecimal.ZERO;
         for (RecipeIngredient r : recipes) {
             Ingredient ingredient = r.getIngredient();
             BigDecimal cost = ingredient.getCostPerUnit().multiply(BigDecimal.valueOf(r.getQuantityRequired()));
@@ -52,7 +56,21 @@ public class ProfitCalculationServiceImpl implements ProfitCalculationService {
     }
 
     @Override
-    public List<ProfitCalculationRecord> getAllProfitRecords() {
-        return new ArrayList<>(profitCalculationRecordRepository.findAll());
+    public ProfitCalculationRecord getCalculationById(Long id) {
+        return profitCalculationRecordRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Profit record not found"));
+    }
+
+    @Override
+    public List<ProfitCalculationRecord> getCalculationsForMenuItem(Long menuItemId) {
+        return profitCalculationRecordRepository.findAll()
+                .stream()
+                .filter(r -> r.getMenuItem().getId().equals(menuItemId))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProfitCalculationRecord> getAllCalculations() {
+        return profitCalculationRecordRepository.findAll();
     }
 }

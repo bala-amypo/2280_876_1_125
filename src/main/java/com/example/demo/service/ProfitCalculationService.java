@@ -5,7 +5,11 @@ import com.example.demo.entity.ProfitCalculationRecord;
 
 public interface ProfitCalculationService {
 
-    ProfitCalculationRecord calculateProfit(Long menuItemId);
+    ProfitCalculationRecord getCalculationById(Long id);
 
-    List<ProfitCalculationRecord> getAllProfitRecords();
+    List<ProfitCalculationRecord> getCalculationsForMenuItem(Long menuItemId);
+
+    List<ProfitCalculationRecord> getAllCalculations();
+
+    ProfitCalculationRecord calculateProfit(Long menuItemId);
 }
