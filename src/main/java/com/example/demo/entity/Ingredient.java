@@ -2,15 +2,12 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@Table(name = "ingredients", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name")
+})
 public class Ingredient {
 
     @Id
@@ -19,20 +16,23 @@ public class Ingredient {
 
     private String name;
     private String unit;
-    private BigDecimal costPerUnit;
-    private Boolean active = true;
 
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private BigDecimal costPerUnit;
+
+    private boolean active = true;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @PrePersist
     void onCreate() {
-        createdAt = new Timestamp(System.currentTimeMillis());
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     void onUpdate() {
-        updatedAt = new Timestamp(System.currentTimeMillis());
+        updatedAt = LocalDateTime.now();
     }
 
     // getters & setters
