@@ -24,6 +24,7 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
     public RecipeIngredient addIngredientToRecipe(Long menuItemId, Long ingredientId, Double quantity) {
         MenuItem menuItem = menuItemRepository.findById(menuItemId)
                 .orElseThrow(() -> new RuntimeException("MenuItem not found"));
+
         Ingredient ingredient = ingredientRepository.findById(ingredientId)
                 .orElseThrow(() -> new RuntimeException("Ingredient not found"));
 
@@ -39,7 +40,6 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
     public RecipeIngredient updateRecipeIngredient(Long id, Double quantity) {
         RecipeIngredient recipeIngredient = recipeIngredientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("RecipeIngredient not found"));
-
         recipeIngredient.setQuantityRequired(quantity);
         return recipeIngredientRepository.save(recipeIngredient);
     }
@@ -48,12 +48,14 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
     public List<RecipeIngredient> getIngredientsByMenuItem(Long menuItemId) {
         MenuItem menuItem = menuItemRepository.findById(menuItemId)
                 .orElseThrow(() -> new RuntimeException("MenuItem not found"));
-
         return recipeIngredientRepository.findByMenuItem(menuItem);
     }
 
     @Override
     public void removeIngredientFromRecipe(Long id) {
+        if (!recipeIngredientRepository.existsById(id)) {
+            throw new RuntimeException("RecipeIngredient not found");
+        }
         recipeIngredientRepository.deleteById(id);
     }
 
@@ -61,8 +63,8 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
     public Double getTotalQuantityOfIngredient(Long ingredientId) {
         Ingredient ingredient = ingredientRepository.findById(ingredientId)
                 .orElseThrow(() -> new RuntimeException("Ingredient not found"));
-
-        Double total = recipeIngredientRepository.sumQuantityByIngredient(ingredient);
-        return total != null ? total : 0.0;
+        return recipeIngredientRepository.findByIngredient(ingredient).stream()
+                .mapToDouble(RecipeIngredient::getQuantityRequired)
+                .sum();
     }
 }
