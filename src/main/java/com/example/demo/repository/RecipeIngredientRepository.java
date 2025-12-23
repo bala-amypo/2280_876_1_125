@@ -1,14 +1,7 @@
 package com.example.demo.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.entity.RecipeIngredient;
-import org.springframework.data.jpa.repository.*;
-import org.springframework.data.repository.query.Param;
-import java.util.List;
 
 public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredient, Long> {
-
-    @Query("SELECT SUM(r.quantityRequired) FROM RecipeIngredient r WHERE r.ingredient.id = :ingredientId")
-    Double getTotalQuantityByIngredientId(@Param("ingredientId") Long ingredientId);
-
-    List<RecipeIngredient> findByMenuItemId(Long menuItemId);
 }
