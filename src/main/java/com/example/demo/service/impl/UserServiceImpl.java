@@ -1,43 +1,39 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.*;
 import com.example.demo.entity.User;
-import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repo;
-    private final PasswordEncoder encoder;
+    private final UserRepository repository;
 
-    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
-        this.repo = repo;
-        this.encoder = encoder;
+    public UserServiceImpl(UserRepository repository) {
+        this.repository = repository;
     }
 
-    public String register(RegisterRequest req) {
-        if (repo.existsByEmail(req.email))
-            throw new BadRequestException("Email already in use");
-
-        User u = new User();
-        u.setFullName(req.fullName);
-        u.setEmail(req.email);
-        u.setPassword(encoder.encode(req.password));
-        u.setRole(req.role != null ? req.role : "MANAGER");
-
-        repo.save(u);
-        return "Registered";
+    public User createUser(User user) {
+        return repository.save(user);
     }
 
-    public String login(AuthRequest req) {
-        User u = repo.findByEmail(req.email);
-        if (u == null || !encoder.matches(req.password, u.getPassword()))
-            throw new BadRequestException("Invalid credentials");
+    public User getUserById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
 
-        JwtTokenProvider jwt = new JwtTokenProvider("secret", 3600000);
-        return jwt.createToken(u.getEmail());
+    public List<User> getAllUsers() {
+        return repository.findAll();
+    }
+
+    public void deactivateUser(Long id) {
+        User user = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        user.setActive(false);
+        repository.save(user);
     }
 }

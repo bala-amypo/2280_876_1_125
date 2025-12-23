@@ -1,14 +1,12 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
-import lombok.*;
+import java.time.LocalDateTime;
+
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
+})
 public class User {
 
     @Id
@@ -18,12 +16,14 @@ public class User {
     private String fullName;
     private String email;
     private String password;
-    private String role = "MANAGER";
-    private Timestamp createdAt;
+    private String role;
+    private boolean active = true;
+
+    private LocalDateTime createdAt;
 
     @PrePersist
     void onCreate() {
-        createdAt = new Timestamp(System.currentTimeMillis());
+        createdAt = LocalDateTime.now();
     }
 
     // getters & setters

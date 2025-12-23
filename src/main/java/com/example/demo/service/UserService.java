@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.AuthRequest;
-import com.example.demo.dto.RegisterRequest;
+import com.example.demo.entity.User;
+import java.util.List;
 
 public interface UserService {
-    String register(RegisterRequest req);
-    String login(AuthRequest req);
+    User createUser(User user);
+    User getUserById(Long id);
+    List<User> getAllUsers();
+    void deactivateUser(Long id);
 }
