@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -17,22 +16,12 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@RequestBody User user) {
-        return service.createUser(user);
-    }
-
-    @GetMapping("/{id}")
-    public User getById(@PathVariable Long id) {
-        return service.getUserById(id);
+    public User save(@RequestBody User user) {
+        return service.save(user);
     }
 
     @GetMapping
-    public List<User> getAll() {
-        return service.getAllUsers();
-    }
-
-    @PutMapping("/{id}/deactivate")
-    public void deactivate(@PathVariable Long id) {
-        service.deactivateUser(id);
+    public List<User> findAll() {
+        return service.findAll();
     }
 }

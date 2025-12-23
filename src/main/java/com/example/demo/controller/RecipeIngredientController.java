@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.entity.RecipeIngredient;
 import com.example.demo.service.RecipeIngredientService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -17,22 +16,12 @@ public class RecipeIngredientController {
     }
 
     @PostMapping
-    public RecipeIngredient add(@RequestBody RecipeIngredient recipeIngredient) {
-        return service.addRecipeIngredient(recipeIngredient);
+    public RecipeIngredient save(@RequestBody RecipeIngredient recipeIngredient) {
+        return service.save(recipeIngredient);
     }
 
-    @PutMapping("/{id}")
-    public RecipeIngredient update(@PathVariable Long id, @RequestParam Double quantity) {
-        return service.updateQuantity(id, quantity);
-    }
-
-    @GetMapping("/menu-item/{menuItemId}")
-    public List<RecipeIngredient> getByMenuItem(@PathVariable Long menuItemId) {
-        return service.getByMenuItem(menuItemId);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.deleteRecipeIngredient(id);
+    @GetMapping
+    public List<RecipeIngredient> findAll() {
+        return service.findAll();
     }
 }

@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.entity.Category;
 import com.example.demo.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -17,27 +16,12 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category create(@RequestBody Category category) {
-        return service.createCategory(category);
+    public Category save(@RequestBody Category category) {
+        return service.save(category);
     }
 
     @GetMapping
-    public List<Category> getAll() {
-        return service.getAllCategories();
-    }
-
-    @GetMapping("/{id}")
-    public Category getById(@PathVariable Long id) {
-        return service.getCategoryById(id);
-    }
-
-    @PutMapping("/{id}")
-    public Category update(@PathVariable Long id, @RequestBody Category category) {
-        return service.updateCategory(id, category);
-    }
-
-    @PutMapping("/{id}/deactivate")
-    public void deactivate(@PathVariable Long id) {
-        service.deactivateCategory(id);
+    public List<Category> findAll() {
+        return service.findAll();
     }
 }
