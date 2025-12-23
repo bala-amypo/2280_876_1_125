@@ -1,13 +1,8 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "categories", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "name")
-})
 public class Category {
 
     @Id
@@ -15,11 +10,14 @@ public class Category {
     private Long id;
 
     private String name;
-    private String description;
     private boolean active = true;
 
-    @ManyToMany(mappedBy = "categories")
-    private Set<MenuItem> menuItems = new HashSet<>();
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    // getters & setters
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 }
