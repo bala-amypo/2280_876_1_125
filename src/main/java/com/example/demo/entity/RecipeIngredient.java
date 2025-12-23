@@ -1,9 +1,12 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-
+import lombok.*;
 @Entity
-@Table(name = "recipe_ingredients")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecipeIngredient {
 
     @Id
