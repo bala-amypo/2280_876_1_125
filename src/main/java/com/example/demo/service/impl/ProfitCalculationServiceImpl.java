@@ -1,63 +1,51 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.MenuItem;
-import com.example.demo.entity.ProfitCalculationRecord;
-import com.example.demo.entity.RecipeIngredient;
+import com.example.demo.entity.ProfitCalculation;
 import com.example.demo.repository.MenuItemRepository;
-import com.example.demo.repository.ProfitCalculationRecordRepository;
-import com.example.demo.repository.RecipeIngredientRepository;
+import com.example.demo.repository.ProfitCalculationRepository;
 import com.example.demo.service.ProfitCalculationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ProfitCalculationServiceImpl implements ProfitCalculationService {
 
-    private final ProfitCalculationRecordRepository recordRepository;
     private final MenuItemRepository menuItemRepository;
-    private final RecipeIngredientRepository recipeIngredientRepository;
+    private final ProfitCalculationRepository profitCalculationRepository;
 
     @Override
-    public ProfitCalculationRecord calculateProfit(Long menuItemId) {
+    public ProfitCalculation calculateProfit(Long menuItemId) {
+
+        // 1️⃣ Get MenuItem
         MenuItem menuItem = menuItemRepository.findById(menuItemId)
                 .orElseThrow(() -> new RuntimeException("MenuItem not found"));
 
-        List<RecipeIngredient> ingredients = recipeIngredientRepository.findByMenuItem(menuItem);
+        // 2️⃣ Selling price (BigDecimal)
+        BigDecimal sellingPrice = menuItem.getSellingPrice();
 
-        BigDecimal totalCost = ingredients.stream()
-                .map(i -> i.getIngredient().getCostPerUnit()
-                        .multiply(BigDecimal.valueOf(i.getQuantityRequired())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        // 3️⃣ Calculate total ingredient cost
+        BigDecimal totalCost = calculateTotalCost(menuItem);
 
-        BigDecimal profitMargin = menuItem.getSellingPrice().subtract(totalCost);
+        // 4️⃣ ✅ PROFIT CALCULATION (THIS IS WHERE YOUR CODE GOES)
+        BigDecimal profit = sellingPrice.subtract(totalCost);
 
-        ProfitCalculationRecord record = new ProfitCalculationRecord();
-        record.setMenuItem(menuItem);
-        record.setTotalCost(totalCost);
-        record.setProfitMargin(profitMargin);
+        // 5️⃣ Save result
+        ProfitCalculation calculation = new ProfitCalculation();
+        calculation.setMenuItem(menuItem);
+        calculation.setTotalCost(totalCost);
+        calculation.setSellingPrice(sellingPrice);
+        calculation.setProfit(profit);
 
-        return recordRepository.save(record);
+        return profitCalculationRepository.save(calculation);
     }
 
-    @Override
-    public ProfitCalculationRecord getCalculationById(Long id) {
-        return recordRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Calculation not found"));
-    }
-
-    @Override
-    public List<ProfitCalculationRecord> getCalculationsForMenuItem(Long menuItemId) {
-        MenuItem menuItem = menuItemRepository.findById(menuItemId)
-                .orElseThrow(() -> new RuntimeException("MenuItem not found"));
-        return recordRepository.findByMenuItem(menuItem);
-    }
-
-    @Override
-    public List<ProfitCalculationRecord> getAllCalculations() {
-        return recordRepository.findAll();
+    // 🔹 Helper method
+    private BigDecimal calculateTotalCost(MenuItem menuItem) {
+        // Your ingredient cost logic here
+        return BigDecimal.ZERO; // replace with real logic
     }
 }
