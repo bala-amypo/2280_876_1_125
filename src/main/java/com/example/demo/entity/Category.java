@@ -1,22 +1,22 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.util.Set;
+import lombok.*;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@Table(name = "categories")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String name;
-    private String description;
+
     private Boolean active = true;
-
-    @ManyToMany(mappedBy = "categories")
-    private Set<MenuItem> menuItems;
-
-    // getters & setters
 }
