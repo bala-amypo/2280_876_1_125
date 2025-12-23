@@ -2,8 +2,12 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
-
+import lombok.*;
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
 

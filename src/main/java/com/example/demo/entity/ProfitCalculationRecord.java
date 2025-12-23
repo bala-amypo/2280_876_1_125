@@ -3,8 +3,12 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-
+import lombok.*;
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfitCalculationRecord {
 
     @Id
