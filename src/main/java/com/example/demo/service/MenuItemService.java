@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.MenuItem;
-
 import java.util.List;
 
 public interface MenuItemService {
@@ -14,5 +13,5 @@ public interface MenuItemService {
 
     List<MenuItem> getAllMenuItems();
 
-    void deactivateMenuItem(Long id);
+    void deleteMenuItem(Long id);
 }

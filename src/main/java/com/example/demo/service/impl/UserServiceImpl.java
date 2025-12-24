@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,9 +36,16 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    // keep existing method (tests may call it)
+    public User findByEmailIgnoreCase(String email) {
+        return userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new BadRequestException("User not found"));
+    }
+
+    // ✅ ADD THIS (controller requires it)
     @Override
     public User getByEmail(String email) {
-    return userRepository.findByEmailIgnoreCase(email)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
