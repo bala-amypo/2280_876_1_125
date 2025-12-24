@@ -105,4 +105,12 @@ public class MenuItemServiceImpl implements MenuItemService {
         item.setActive(false);
         menuItemRepository.save(item);
     }
+
+    // ✅ REQUIRED BY TESTS / CONTROLLER
+    @Override
+    public void deleteMenuItem(Long id) {
+        MenuItem item = getMenuItemById(id);
+        item.setActive(false);
+        menuItemRepository.save(item);
+    }
 }
