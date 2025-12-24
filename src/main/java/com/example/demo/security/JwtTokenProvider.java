@@ -1,27 +1,27 @@
-// package com.example.demo.security;
+package com.example.demo.security;
 
-// import io.jsonwebtoken.*;
-// import java.util.Date;
+import io.jsonwebtoken.*;
+import java.util.Date;
 
-// public class JwtTokenProvider {
+public class JwtTokenProvider {
 
-//     private final String secret;
-//     private final long validityInMs;
+    private final String secret;
+    private final long validityInMs;
 
-//     public JwtTokenProvider(String secret, long validityInMs) {
-//         this.secret = secret;
-//         this.validityInMs = validityInMs;
-//     }
+    public JwtTokenProvider(String secret, long validityInMs) {
+        this.secret = secret;
+        this.validityInMs = validityInMs;
+    }
 
-//     public String createToken(String email) {
-//         Date now = new Date();
-//         Date exp = new Date(now.getTime() + validityInMs);
+    public String createToken(String email) {
+        Date now = new Date();
+        Date exp = new Date(now.getTime() + validityInMs);
 
-//         return Jwts.builder()
-//                 .setSubject(email)
-//                 .setIssuedAt(now)
-//                 .setExpiration(exp)
-//                 .signWith(SignatureAlgorithm.HS256, secret)
-//                 .compact();
-//     }
-// }
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(now)
+                .setExpiration(exp)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+    }
+}
