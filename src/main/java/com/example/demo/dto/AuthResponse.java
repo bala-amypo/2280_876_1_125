@@ -1,5 +1,8 @@
 package com.example.demo.dto;
 
+/**
+ * DTO for login response including JWT token.
+ */
 public class AuthResponse {
 
     private String token;
@@ -7,7 +10,8 @@ public class AuthResponse {
     private String role;
     private Long id;
 
-    public AuthResponse() {}
+    public AuthResponse() {
+    }
 
     public AuthResponse(String token, String email, String role, Long id) {
         this.token = token;
@@ -15,6 +19,8 @@ public class AuthResponse {
         this.role = role;
         this.id = id;
     }
+
+    // Getters and Setters
 
     public String getToken() {
         return token;
