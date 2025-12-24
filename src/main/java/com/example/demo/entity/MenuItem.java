@@ -1,9 +1,9 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "menu_items")
 public class MenuItem {
 
     @Id
@@ -12,44 +12,29 @@ public class MenuItem {
 
     private String name;
 
-    // REQUIRED by tests
-    private Double sellingPrice;
+    @Column(nullable = false)
+    private BigDecimal sellingPrice;
 
-    private Boolean active = true;
+    private boolean active = true;   // ✅ REQUIRED
 
-    public MenuItem() {}
-
-    // ---------- getters & setters ----------
-
+    // getters & setters
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Double getSellingPrice() {
+    public BigDecimal getSellingPrice() {
         return sellingPrice;
     }
 
-    public void setSellingPrice(Double sellingPrice) {
-        this.sellingPrice = sellingPrice;
-    }
-
-    public Boolean getActive() {
+    public boolean isActive() {      // ✅ REQUIRED
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 }
