@@ -29,23 +29,28 @@ public class AuthController {
 
     @PostMapping("/register")
     public User register(@RequestBody RegisterRequest request) {
+        // register using RegisterRequest directly
         return userService.register(request);
     }
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
 
-        Authentication authentication =
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                request.getEmail(),
-                                request.getPassword()
-                        )
-                );
+        // Authenticate user credentials
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
 
-        User user = userService.getByEmail(request.getEmail());
+        // Fetch user entity by email
+        User user = userService.getByEmailIgnoreCase(request.getEmail());
+
+        // Generate JWT token
         String token = tokenProvider.generateToken(authentication, user);
 
+        // Return auth response
         return new AuthResponse(
                 token,
                 user.getEmail(),
