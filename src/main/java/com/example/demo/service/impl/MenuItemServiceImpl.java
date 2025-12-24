@@ -36,7 +36,8 @@ public class MenuItemServiceImpl implements MenuItemService {
     public MenuItem updateMenuItem(Long id, MenuItem menuItem) {
         MenuItem existing = getMenuItemById(id);
         existing.setName(menuItem.getName());
-        existing.setPrice(menuItem.getPrice());
+        existing.setPrice(menuItem.getSellingPrice()
+);
         return menuItemRepository.save(existing);
     }
 
