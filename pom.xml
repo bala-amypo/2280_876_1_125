@@ -66,13 +66,19 @@
             <version>2.2.0</version>
         </dependency>
 
-        <!-- H2 -->
+        <!-- H2 Database (optional, can keep for testing) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-        
+
+        <!-- MySQL Database -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.0.33</version>
+        </dependency>
 
         <!-- Test -->
         <dependency>
