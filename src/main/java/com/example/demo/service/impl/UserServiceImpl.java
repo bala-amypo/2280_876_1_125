@@ -36,8 +36,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmailIgnoreCase(String email) {
-        return userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new BadRequestException("User not found"));
+public User getByEmail(String email) {
+    return userRepository.findByEmailIgnoreCase(email)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

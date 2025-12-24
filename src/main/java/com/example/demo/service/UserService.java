@@ -7,5 +7,5 @@ public interface UserService {
 
     User register(RegisterRequest request);
 
-    User findByEmailIgnoreCase(String email);
+    User getByEmail(String email);
 }
