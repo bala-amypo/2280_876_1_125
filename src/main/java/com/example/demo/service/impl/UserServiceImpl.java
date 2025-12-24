@@ -15,7 +15,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -23,15 +24,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User register(RegisterRequest request) {
         User user = new User();
-        user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole("USER"); // default role
+        user.setRole(request.getRole()); // Assuming role is provided in RegisterRequest
         return userRepository.save(user);
     }
 
     @Override
-    public User getByEmail(String email) {
+    public User getByEmailIgnoreCase(String email) {
         return userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
