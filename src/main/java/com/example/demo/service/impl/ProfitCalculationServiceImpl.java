@@ -89,4 +89,10 @@ public class ProfitCalculationServiceImpl implements ProfitCalculationService {
                 .filter(r -> r.getProfitMargin() >= min && r.getProfitMargin() <= max)
                 .collect(Collectors.toList());
     }
+
+    // Your new method
+    @Override
+    public List<ProfitCalculationRecord> getByMenuItem(Long menuItemId) {
+        return recordRepository.findByMenuItemId(menuItemId);
+    }
 }
