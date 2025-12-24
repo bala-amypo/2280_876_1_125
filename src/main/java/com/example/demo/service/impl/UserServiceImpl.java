@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-public User getByEmail(String email) {
+    public User getByEmail(String email) {
     return userRepository.findByEmailIgnoreCase(email)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
