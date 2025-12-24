@@ -15,7 +15,7 @@ public class JwtTokenProvider {
     private final SecretKey key =
             Keys.hmacShaKeyFor("test-secret-test-secret-test-secret".getBytes());
 
-    private final long validityInMs = 3600000; // 1 hour
+    private final long validityInMs = 3600000;
 
     public String generateToken(Authentication authentication, User user) {
 
@@ -23,10 +23,10 @@ public class JwtTokenProvider {
         Date expiry = new Date(now.getTime() + validityInMs);
 
         return Jwts.builder()
-                .subject(user.getEmail())
+                .setSubject(user.getEmail())
                 .claim("role", user.getRole())
-                .issuedAt(now)
-                .expiration(expiry)
+                .setIssuedAt(now)
+                .setExpiration(expiry)
                 .signWith(key)
                 .compact();
     }
