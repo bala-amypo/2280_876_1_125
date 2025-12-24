@@ -3,42 +3,40 @@ package com.example.demo.controller;
 import com.example.demo.entity.MenuItem;
 import com.example.demo.service.MenuItemService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/menu-items")
+@RequestMapping("/menu-items")
 public class MenuItemController {
 
-    private final MenuItemService service;
+    private final MenuItemService menuItemService;
 
-    public MenuItemController(MenuItemService service) {
-        this.service = service;
+    public MenuItemController(MenuItemService menuItemService) {
+        this.menuItemService = menuItemService;
     }
 
     @PostMapping
-    public MenuItem create(@RequestBody MenuItem menuItem) {
-        return service.createMenuItem(menuItem);
+    public MenuItem createMenuItem(@RequestBody MenuItem menuItem) {
+        return menuItemService.createMenuItem(menuItem);
     }
 
     @GetMapping
-    public List<MenuItem> getAll() {
-        return service.getAllMenuItems();
+    public List<MenuItem> getAllMenuItems() {
+        return menuItemService.getAllMenuItems();
     }
 
     @GetMapping("/{id}")
-    public MenuItem getById(@PathVariable Long id) {
-        return service.getMenuItemById(id);
+    public MenuItem getMenuItem(@PathVariable Long id) {
+        return menuItemService.getMenuItemById(id);
     }
 
     @PutMapping("/{id}")
-    public MenuItem update(@PathVariable Long id,
-                           @RequestBody MenuItem menuItem) {
-        return service.updateMenuItem(id, menuItem);
+    public MenuItem updateMenuItem(@PathVariable Long id, @RequestBody MenuItem menuItem) {
+        return menuItemService.updateMenuItem(id, menuItem);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.deleteMenuItem(id);
+    public void deleteMenuItem(@PathVariable Long id) {
+        menuItemService.deleteMenuItem(id);
     }
 }
