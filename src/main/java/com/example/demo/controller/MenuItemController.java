@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.MenuItem;
 import com.example.demo.service.MenuItemService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -16,12 +17,28 @@ public class MenuItemController {
     }
 
     @PostMapping
-    public MenuItem save(@RequestBody MenuItem menuItem) {
-        return service.save(menuItem);
+    public MenuItem create(@RequestBody MenuItem menuItem) {
+        return service.createMenuItem(menuItem);
     }
 
     @GetMapping
-    public List<MenuItem> findAll() {
-        return service.findAll();
+    public List<MenuItem> getAll() {
+        return service.getAllMenuItems();
+    }
+
+    @GetMapping("/{id}")
+    public MenuItem getById(@PathVariable Long id) {
+        return service.getMenuItemById(id);
+    }
+
+    @PutMapping("/{id}")
+    public MenuItem update(@PathVariable Long id,
+                           @RequestBody MenuItem menuItem) {
+        return service.updateMenuItem(id, menuItem);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.deleteMenuItem(id);
     }
 }

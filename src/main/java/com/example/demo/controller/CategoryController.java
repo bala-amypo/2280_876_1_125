@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Category;
 import com.example.demo.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -16,12 +17,12 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category save(@RequestBody Category category) {
-        return service.save(category);
+    public Category create(@RequestBody Category category) {
+        return service.createCategory(category);
     }
 
     @GetMapping
-    public List<Category> findAll() {
-        return service.findAll();
+    public List<Category> getAll() {
+        return service.getAllCategories();
     }
 }
