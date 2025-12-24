@@ -12,11 +12,15 @@ public class MenuItem {
 
     private String name;
 
-    private Double price; // <-- Make sure this field exists
+    // REQUIRED by tests
+    private Double sellingPrice;
+
+    private Boolean active = true;
 
     public MenuItem() {}
 
-    // Getters and setters
+    // ---------- getters & setters ----------
+
     public Long getId() {
         return id;
     }
@@ -33,11 +37,19 @@ public class MenuItem {
         this.name = name;
     }
 
-    public Double getPrice() { // <-- Getter for price
-        return price;
+    public Double getSellingPrice() {
+        return sellingPrice;
     }
 
-    public void setPrice(Double price) { // <-- Setter for price
-        this.price = price;
+    public void setSellingPrice(Double sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
