@@ -6,13 +6,13 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // For login by username
+    // Find a user by username (for login)
     Optional<User> findByUsername(String username);
 
-    // For login by email (ignore case)
+    // Find a user by email (case-insensitive)
     Optional<User> findByEmailIgnoreCase(String email);
 
-    // Check if username or email exists
+    // Check if username or email already exists
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
 }
