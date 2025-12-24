@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.LoginResponse;
-import com.example.demo.dto.UserDTO;
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
@@ -31,35 +31,51 @@ public class UserController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    // ----------------------
     // Register new user
+    // ----------------------
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO) {
-        User savedUser = userService.register(userDTO);
+    public ResponseEntity<User> registerUser(@RequestBody RegisterRequest request) {
+        User savedUser = userService.register(request);
         return ResponseEntity.ok(savedUser);
     }
 
-    // Login
+    // ----------------------
+    // Login user
+    // ----------------------
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+
+        // Authenticate user credentials
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
+                        request.getEmail(),
+                        request.getPassword()
                 )
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Fetch the User entity
-        User user = userService.getUserByUsername(loginRequest.getUsername());
+        // Fetch the User entity by email
+        User user = userService.getByEmailIgnoreCase(request.getEmail());
 
         // Generate JWT token
         String token = jwtTokenProvider.generateToken(authentication, user);
 
-        return ResponseEntity.ok(new LoginResponse(token));
+        // Return AuthResponse
+        AuthResponse response = new AuthResponse(
+                token,
+                user.getEmail(),
+                user.getRole(),
+                user.getId()
+        );
+
+        return ResponseEntity.ok(response);
     }
 
+    // ----------------------
     // Get user by username
+    // ----------------------
     @GetMapping("/{username}")
     public ResponseEntity<User> getUser(@PathVariable String username) {
         User user = userService.getUserByUsername(username);
