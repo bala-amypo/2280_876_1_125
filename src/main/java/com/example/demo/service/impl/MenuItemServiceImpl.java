@@ -17,26 +17,35 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItem save(MenuItem menuItem) {
+    public MenuItem createMenuItem(MenuItem menuItem) {
         return menuItemRepository.save(menuItem);
     }
 
     @Override
-    public List<MenuItem> getAll() {
+    public MenuItem getMenuItemById(Long id) {
+        return menuItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("MenuItem not found with id: " + id));
+    }
+
+    @Override
+    public List<MenuItem> getAllMenuItems() {
         return menuItemRepository.findAll();
     }
 
     @Override
-    public MenuItem getById(Long id) {
-        return menuItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("MenuItem not found"));
+    public MenuItem updateMenuItem(Long id, MenuItem menuItem) {
+        MenuItem existing = getMenuItemById(id);
+
+        existing.setName(menuItem.getName());
+        existing.setSellingPrice(menuItem.getSellingPrice());
+        existing.setActive(menuItem.isActive());
+
+        return menuItemRepository.save(existing);
     }
 
     @Override
-    public Double getSellingPrice(Long menuItemId) {
-        MenuItem menuItem = getById(menuItemId);
-
-        // ✅ FIXED: use getSellingPrice(), NOT getPrice()
-        return menuItem.getSellingPrice();
+    public void deleteMenuItem(Long id) {
+        MenuItem menuItem = getMenuItemById(id);
+        menuItemRepository.delete(menuItem);
     }
 }
