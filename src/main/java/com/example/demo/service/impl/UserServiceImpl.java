@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
@@ -22,22 +21,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO register(RegisterRequest request) {
+    public User register(RegisterRequest request) {
+        // Check if user already exists
+        if (userRepository.existsByEmail(request.getEmail()) || userRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("User already exists with this email or username");
+        }
+
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole()); // make sure User entity has role field
+        user.setRole(request.getRole()); // Make sure User entity has a role field
 
-        User saved = userRepository.save(user);
-
-        // Convert saved User to UserDTO
-        UserDTO dto = new UserDTO();
-        dto.setId(saved.getId());
-        dto.setUsername(saved.getUsername());
-        dto.setEmail(saved.getEmail());
-        dto.setRole(saved.getRole());
-        return dto;
+        return userRepository.save(user);
     }
 
     @Override
