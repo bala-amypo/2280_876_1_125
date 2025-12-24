@@ -14,4 +14,6 @@ public interface MenuItemService {
     List<MenuItem> getAllMenuItems();
 
     void deleteMenuItem(Long id);
+
+    void deactivateMenuItem(Long id);
 }
