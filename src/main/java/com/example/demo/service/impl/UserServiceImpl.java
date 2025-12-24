@@ -1,51 +1,37 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.User;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User register(RegisterRequest request) {
-
-        userRepository.findByEmailIgnoreCase(request.getEmail())
-                .ifPresent(u -> {
-                    throw new BadRequestException("Email already in use");
-                });
-
+    public User registerUser(UserDTO userDTO) {
         User user = new User();
-        user.setFullName(request.getFullName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
-
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         return userRepository.save(user);
     }
 
-    // keep existing method (tests may call it)
-    public User findByEmailIgnoreCase(String email) {
-        return userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new BadRequestException("User not found"));
-    }
-
-    // ✅ ADD THIS (controller requires it)
     @Override
-    public User getByEmail(String email) {
-        return userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

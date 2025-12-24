@@ -1,11 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.User;
 
 public interface UserService {
-
-    User register(RegisterRequest request);
-
-    User getByEmail(String email);
+    User registerUser(UserDTO userDTO);
+    User getUserByUsername(String username);
 }
