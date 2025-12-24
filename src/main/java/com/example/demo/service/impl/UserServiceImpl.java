@@ -1,27 +1,43 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-import org.springframework.stereotype.Service;
-import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository repository) {
-        this.repository = repository;
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User save(User user) {
-        return repository.save(user);
+    public User register(RegisterRequest request) {
+
+        userRepository.findByEmailIgnoreCase(request.getEmail())
+                .ifPresent(u -> {
+                    throw new BadRequestException("Email already in use");
+                });
+
+        User user = new User();
+        user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(request.getRole());
+
+        return userRepository.save(user);
     }
 
     @Override
-    public List<User> findAll() {
-        return repository.findAll();
+    public User findByEmailIgnoreCase(String email) {
+        return userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new BadRequestException("User not found"));
     }
 }
