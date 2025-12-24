@@ -2,19 +2,35 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "profit_calculation_records")
 public class ProfitCalculationRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private MenuItem menuItem;
 
+    @Column(nullable = false)
     private BigDecimal totalCost;
+
+    @Column(nullable = false)
     private Double profitMargin;
+
+    private LocalDateTime calculatedAt;
+
+    @PrePersist
+    public void onCreate() {
+        calculatedAt = LocalDateTime.now();
+    }
+
+    public ProfitCalculationRecord() {}
+
+    /* getters and setters */
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -27,4 +43,6 @@ public class ProfitCalculationRecord {
 
     public Double getProfitMargin() { return profitMargin; }
     public void setProfitMargin(Double profitMargin) { this.profitMargin = profitMargin; }
+
+    public LocalDateTime getCalculatedAt() { return calculatedAt; }
 }

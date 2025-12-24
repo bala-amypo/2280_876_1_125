@@ -1,16 +1,32 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(name = "categories", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name")
+})
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+
+    private String description;
+
     private boolean active = true;
+
+    @ManyToMany(mappedBy = "categories")
+    private Set<MenuItem> menuItems = new HashSet<>();
+
+    public Category() {}
+
+    /* getters and setters */
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -18,6 +34,12 @@ public class Category {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+
+    public Set<MenuItem> getMenuItems() { return menuItems; }
+    public void setMenuItems(Set<MenuItem> menuItems) { this.menuItems = menuItems; }
 }
