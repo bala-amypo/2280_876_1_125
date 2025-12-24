@@ -3,42 +3,40 @@ package com.example.demo.controller;
 import com.example.demo.entity.Ingredient;
 import com.example.demo.service.IngredientService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ingredients")
+@RequestMapping("/ingredients")
 public class IngredientController {
 
-    private final IngredientService service;
+    private final IngredientService ingredientService;
 
-    public IngredientController(IngredientService service) {
-        this.service = service;
+    public IngredientController(IngredientService ingredientService) {
+        this.ingredientService = ingredientService;
     }
 
     @PostMapping
-    public Ingredient create(@RequestBody Ingredient ingredient) {
-        return service.createIngredient(ingredient);
+    public Ingredient createIngredient(@RequestBody Ingredient ingredient) {
+        return ingredientService.createIngredient(ingredient);
     }
 
     @GetMapping
-    public List<Ingredient> getAll() {
-        return service.getAllIngredients();
+    public List<Ingredient> getAllIngredients() {
+        return ingredientService.getAllIngredients();
     }
 
     @GetMapping("/{id}")
-    public Ingredient getById(@PathVariable Long id) {
-        return service.getIngredientById(id);
+    public Ingredient getIngredient(@PathVariable Long id) {
+        return ingredientService.getIngredientById(id);
     }
 
     @PutMapping("/{id}")
-    public Ingredient update(@PathVariable Long id,
-                             @RequestBody Ingredient ingredient) {
-        return service.updateIngredient(id, ingredient);
+    public Ingredient updateIngredient(@PathVariable Long id, @RequestBody Ingredient ingredient) {
+        return ingredientService.updateIngredient(id, ingredient);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.deleteIngredient(id);
+    public void deleteIngredient(@PathVariable Long id) {
+        ingredientService.deleteIngredient(id);
     }
 }
