@@ -1,6 +1,18 @@
-ProfitCalculationRecord calculateProfit(Long menuItemId);
-ProfitCalculationRecord getCalculationById(Long id);
-List<ProfitCalculationRecord> getCalculationsForMenuItem(Long menuItemId);
-List<ProfitCalculationRecord> getAllCalculations();
-List<ProfitCalculationRecord> findRecordsWithMarginBetween(Double min, Double max);
-List<ProfitCalculationRecord> getByMenuItem(Long menuItemId);
+package com.example.demo.service;
+
+import com.example.demo.entity.MenuItem;
+
+import java.util.List;
+
+public interface MenuItemService {
+
+    MenuItem createMenuItem(MenuItem menuItem);
+
+    MenuItem updateMenuItem(Long id, MenuItem menuItem);
+
+    MenuItem getMenuItemById(Long id);
+
+    List<MenuItem> getAllMenuItems();
+
+    void deleteMenuItem(Long id);
+}
