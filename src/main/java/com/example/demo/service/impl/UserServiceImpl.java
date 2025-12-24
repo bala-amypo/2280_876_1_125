@@ -21,12 +21,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerUser(UserDTO userDTO) {
+    public User register(UserDTO userDTO) {
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         return userRepository.save(user);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override

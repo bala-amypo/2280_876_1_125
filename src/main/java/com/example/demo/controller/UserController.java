@@ -23,41 +23,45 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserController(UserService userService, 
-                          AuthenticationManager authenticationManager, 
+    public UserController(UserService userService,
+                          AuthenticationManager authenticationManager,
                           JwtTokenProvider jwtTokenProvider) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // Register a new user
+    // Register new user
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody UserDTO userDTO) {
-        User savedUser = userService.registerUser(userDTO);
+        User savedUser = userService.register(userDTO);
         return ResponseEntity.ok(savedUser);
     }
 
-    // Login user and generate JWT
+    // Login
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(), 
+                        loginRequest.getUsername(),
                         loginRequest.getPassword()
                 )
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtTokenProvider.generateToken(authentication);
+
+        // Fetch the User entity
+        User user = userService.getUserByUsername(loginRequest.getUsername());
+
+        // Generate JWT token
+        String token = jwtTokenProvider.generateToken(authentication, user);
 
         return ResponseEntity.ok(new LoginResponse(token));
     }
 
-    // Get profile of the logged-in user
-    @GetMapping("/me")
-    public ResponseEntity<User> getProfile(Authentication authentication) {
-        String username = authentication.getName();
+    // Get user by username
+    @GetMapping("/{username}")
+    public ResponseEntity<User> getUser(@PathVariable String username) {
         User user = userService.getUserByUsername(username);
         return ResponseEntity.ok(user);
     }
