@@ -6,30 +6,28 @@ import com.example.demo.entity.ProfitCalculationRecord;
 import com.example.demo.entity.RecipeIngredient;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.IngredientRepository;
 import com.example.demo.repository.MenuItemRepository;
 import com.example.demo.repository.ProfitCalculationRecordRepository;
 import com.example.demo.repository.RecipeIngredientRepository;
 import com.example.demo.service.ProfitCalculationService;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service   // ✅ VERY IMPORTANT
 public class ProfitCalculationServiceImpl implements ProfitCalculationService {
 
     private final MenuItemRepository menuItemRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
-    private final IngredientRepository ingredientRepository;
     private final ProfitCalculationRecordRepository recordRepository;
 
     public ProfitCalculationServiceImpl(MenuItemRepository menuItemRepository,
                                         RecipeIngredientRepository recipeIngredientRepository,
-                                        IngredientRepository ingredientRepository,
                                         ProfitCalculationRecordRepository recordRepository) {
         this.menuItemRepository = menuItemRepository;
         this.recipeIngredientRepository = recipeIngredientRepository;
-        this.ingredientRepository = ingredientRepository;
         this.recordRepository = recordRepository;
     }
 
@@ -43,21 +41,25 @@ public class ProfitCalculationServiceImpl implements ProfitCalculationService {
                 recipeIngredientRepository.findByMenuItemId(menuItemId);
 
         if (ingredients.isEmpty()) {
-            throw new BadRequestException("No recipe ingredients found");
+            throw new BadRequestException("No recipe ingredients found for this menu item");
         }
 
         BigDecimal totalCost = BigDecimal.ZERO;
 
         for (RecipeIngredient ri : ingredients) {
-            Ingredient ing = ri.getIngredient();
-            totalCost = totalCost.add(
-                    ing.getCostPerUnit()
-                            .multiply(BigDecimal.valueOf(ri.getQuantityRequired()))
-            );
+            Ingredient ingredient = ri.getIngredient();
+
+            BigDecimal ingredientCost =
+                    ingredient.getCostPerUnit()
+                            .multiply(BigDecimal.valueOf(ri.getQuantityRequired()));
+
+            totalCost = totalCost.add(ingredientCost);
         }
 
         BigDecimal sellingPrice = menuItem.getSellingPrice();
-        double profitMargin = sellingPrice.subtract(totalCost).doubleValue();
+
+        double profitMargin =
+                sellingPrice.subtract(totalCost).doubleValue();
 
         ProfitCalculationRecord record = new ProfitCalculationRecord();
         record.setMenuItem(menuItem);
@@ -90,7 +92,6 @@ public class ProfitCalculationServiceImpl implements ProfitCalculationService {
                 .collect(Collectors.toList());
     }
 
-    // Your new method
     @Override
     public List<ProfitCalculationRecord> getByMenuItem(Long menuItemId) {
         return recordRepository.findByMenuItemId(menuItemId);

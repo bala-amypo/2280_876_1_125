@@ -1,18 +1,6 @@
-package com.example.demo.service;
-
-import com.example.demo.entity.MenuItem;
-
-import java.util.List;
-
-public interface MenuItemService {
-
-    MenuItem createMenuItem(MenuItem menuItem);
-
-    MenuItem getMenuItemById(Long id);
-
-    List<MenuItem> getAllMenuItems();
-
-    MenuItem updateMenuItem(Long id, MenuItem menuItem);
-
-    void deleteMenuItem(Long id);
-}
+ProfitCalculationRecord calculateProfit(Long menuItemId);
+ProfitCalculationRecord getCalculationById(Long id);
+List<ProfitCalculationRecord> getCalculationsForMenuItem(Long menuItemId);
+List<ProfitCalculationRecord> getAllCalculations();
+List<ProfitCalculationRecord> findRecordsWithMarginBetween(Double min, Double max);
+List<ProfitCalculationRecord> getByMenuItem(Long menuItemId);
