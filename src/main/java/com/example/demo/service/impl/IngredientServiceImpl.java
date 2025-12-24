@@ -59,9 +59,16 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public void deleteIngredient(Long id) {
-        Ingredient ing = getIngredientById(id);
+    public void deactivateIngredient(Long id) {
+        Ingredient ing = ingredientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ingredient not found"));
         ing.setActive(false);
-        repository.save(ing);
+        ingredientRepository.save(ing);
+    }
+
+    // ✅ ADD THIS
+    @Override
+    public void deleteIngredient(Long id) {
+        deactivateIngredient(id);
     }
 }
