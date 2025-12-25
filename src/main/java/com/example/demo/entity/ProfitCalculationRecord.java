@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Entity
 public class ProfitCalculationRecord {
@@ -14,14 +15,14 @@ public class ProfitCalculationRecord {
     private MenuItem menuItem;
 
     private BigDecimal totalCost;
+    private BigDecimal profitMargin;
 
-    private Double profitMargin;   // ✅ MUST BE Double
+    private Timestamp calculatedAt;
 
-    public Double getProfitMargin() {
-        return profitMargin;
+    @PrePersist
+    public void onCreate() {
+        calculatedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    public void setProfitMargin(Double profitMargin) {
-        this.profitMargin = profitMargin;
-    }
+    // getters & setters
 }
