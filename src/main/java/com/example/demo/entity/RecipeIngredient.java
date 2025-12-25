@@ -3,19 +3,32 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "recipe_ingredients")
 public class RecipeIngredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private MenuItem menuItem;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Ingredient ingredient;
 
     private Double quantity;
 
-    // getters & setters
+    /* Getters & Setters */
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public MenuItem getMenuItem() { return menuItem; }
+    public void setMenuItem(MenuItem menuItem) { this.menuItem = menuItem; }
+
+    public Ingredient getIngredient() { return ingredient; }
+    public void setIngredient(Ingredient ingredient) { this.ingredient = ingredient; }
+
+    public Double getQuantity() { return quantity; }
+    public void setQuantity(Double quantity) { this.quantity = quantity; }
 }
