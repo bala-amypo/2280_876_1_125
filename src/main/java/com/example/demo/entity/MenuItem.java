@@ -2,8 +2,12 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class MenuItem {
 
     @Id
@@ -11,30 +15,30 @@ public class MenuItem {
     private Long id;
 
     private String name;
-
-    @Column(nullable = false)
+    private String description;
     private BigDecimal sellingPrice;
+    private Boolean active = true;
 
-    private boolean active = true;   // ✅ REQUIRED
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
+
+    @ManyToMany
+    @JoinTable(
+        name = "menu_item_category",
+        joinColumns = @JoinColumn(name = "menu_item_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories = new HashSet<>();
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = new Timestamp(System.currentTimeMillis());
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        updatedAt = new Timestamp(System.currentTimeMillis());
+    }
 
     // getters & setters
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getSellingPrice() {
-        return sellingPrice;
-    }
-
-    public boolean isActive() {      // ✅ REQUIRED
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 }
