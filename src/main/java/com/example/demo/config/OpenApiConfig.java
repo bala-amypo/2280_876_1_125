@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -9,21 +10,20 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
-
+    
     @Bean
     public OpenAPI customOpenAPI() {
-
-        SecurityScheme bearerAuth = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
-                .bearerFormat("JWT");
-
         return new OpenAPI()
-                .info(new Info()
-                        .title("Menu Profitability API")
-                        .version("1.0")
-                        .description("JWT Secured Menu Cost & Profit Calculator"))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .schemaRequirement("bearerAuth", bearerAuth);
+            .info(new Info()
+                .title("Menu Profitability Calculator API")
+                .version("1.0")
+                .description("API for managing menu items and calculating profitability"))
+            .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+            .components(new Components()
+                .addSecuritySchemes("bearerAuth", 
+                    new SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")));
     }
 }
