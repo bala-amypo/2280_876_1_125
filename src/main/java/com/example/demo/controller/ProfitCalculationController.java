@@ -2,27 +2,39 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ProfitCalculationRecord;
 import com.example.demo.service.ProfitCalculationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/profits")
+@RequestMapping("/api/profit")
+@Tag(name = "Profit Calculations", description = "Profit calculation endpoints")
 public class ProfitCalculationController {
-
-    private final ProfitCalculationService service;
-
-    public ProfitCalculationController(ProfitCalculationService service) {
-        this.service = service;
+    private final ProfitCalculationService profitCalculationService;
+    
+    public ProfitCalculationController(ProfitCalculationService profitCalculationService) {
+        this.profitCalculationService = profitCalculationService;
     }
-
-    @PostMapping("/{menuItemId}")
-    public ProfitCalculationRecord calculate(@PathVariable Long menuItemId) {
-        return service.calculateProfit(menuItemId);
+    
+    @PostMapping("/calculate/{menuItemId}")
+    public ResponseEntity<ProfitCalculationRecord> calculateProfit(@PathVariable Long menuItemId) {
+        return ResponseEntity.ok(profitCalculationService.calculateProfit(menuItemId));
     }
-
-    @GetMapping("/menu/{menuItemId}")
-    public List<ProfitCalculationRecord> getByMenu(@PathVariable Long menuItemId) {
-        return service.getByMenuItem(menuItemId);
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<ProfitCalculationRecord> getCalculation(@PathVariable Long id) {
+        return ResponseEntity.ok(profitCalculationService.getCalculationById(id));
+    }
+    
+    @GetMapping("/menu-item/{menuItemId}")
+    public ResponseEntity<List<ProfitCalculationRecord>> getCalculationsForMenuItem(@PathVariable Long menuItemId) {
+        return ResponseEntity.ok(profitCalculationService.getCalculationsForMenuItem(menuItemId));
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<ProfitCalculationRecord>> getAllCalculations() {
+        return ResponseEntity.ok(profitCalculationService.getAllCalculations());
     }
 }

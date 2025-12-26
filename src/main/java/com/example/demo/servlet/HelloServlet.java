@@ -1,5 +1,6 @@
 package com.example.demo.servlet;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,19 +11,14 @@ import java.io.PrintWriter;
 
 @WebServlet(urlPatterns = "/hello-servlet")
 public class HelloServlet extends HttpServlet {
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
-        if (response == null) {
-            throw new IOException("Response is null");
-        }
-
+            throws ServletException, IOException {
+        response.setStatus(200);
         response.setContentType("text/plain");
-
-        PrintWriter writer = response.getWriter();
-        writer.write("Hello from servlet");
-        writer.flush();
+        PrintWriter out = response.getWriter();
+        out.print("Hello from HelloServlet");
+        out.flush();
     }
 }
