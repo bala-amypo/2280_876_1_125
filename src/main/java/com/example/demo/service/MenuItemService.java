@@ -8,5 +8,5 @@ public interface MenuItemService {
     MenuItem updateMenuItem(Long id, MenuItem menuItem);
     MenuItem getMenuItemById(Long id);
     List<MenuItem> getAllMenuItems();
-    MenuItem deactivateMenuItem(Long id);
+    void deactivateMenuItem(Long id);
 }
