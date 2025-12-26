@@ -12,8 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
@@ -31,18 +29,18 @@ public class UserController {
     }
     
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         User user = userService.register(request);
         return ResponseEntity.ok("User registered successfully");
     }
     
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(userService.login(request));
     }
     
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody AuthRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
