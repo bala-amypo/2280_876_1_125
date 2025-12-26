@@ -7,5 +7,4 @@ public interface UserService {
     User register(RegisterRequest request);
     String login(AuthRequest request);
     User getByEmailIgnoreCase(String email);
-    User getUserByUsername(String username);
 }

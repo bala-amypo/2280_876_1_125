@@ -62,9 +62,9 @@ public class UserController {
         return ResponseEntity.ok(authResponse);
     }
     
-    @GetMapping("/user/{username}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
-        User user = userService.getUserByUsername(username);
+    @GetMapping("/user/email/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        User user = userService.getByEmailIgnoreCase(email);
         return ResponseEntity.ok(user);
     }
 }
