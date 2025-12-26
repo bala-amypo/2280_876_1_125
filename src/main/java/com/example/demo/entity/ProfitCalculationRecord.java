@@ -2,43 +2,55 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "profit_records")
+@Table(name = "profit_calculation_records")
 public class ProfitCalculationRecord {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(optional = false)
+    
+    @ManyToOne
+    @JoinColumn(name = "menu_item_id", nullable = false)
     private MenuItem menuItem;
-
+    
+    @Column(nullable = false)
     private BigDecimal totalCost;
-
+    
+    @Column(nullable = false)
     private BigDecimal profitMargin;
-
-    private Timestamp calculatedAt;
-
+    
+    @Column(updatable = false)
+    private LocalDateTime calculatedAt;
+    
     @PrePersist
-    public void onCreate() {
-        calculatedAt = new Timestamp(System.currentTimeMillis());
+    protected void onCreate() {
+        calculatedAt = LocalDateTime.now();
     }
-
-    /* Getters & Setters */
-
+    
+    // Constructors
+    public ProfitCalculationRecord() {}
+    
+    public ProfitCalculationRecord(MenuItem menuItem, BigDecimal totalCost, BigDecimal profitMargin) {
+        this.menuItem = menuItem;
+        this.totalCost = totalCost;
+        this.profitMargin = profitMargin;
+    }
+    
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
+    
     public MenuItem getMenuItem() { return menuItem; }
     public void setMenuItem(MenuItem menuItem) { this.menuItem = menuItem; }
-
+    
     public BigDecimal getTotalCost() { return totalCost; }
     public void setTotalCost(BigDecimal totalCost) { this.totalCost = totalCost; }
-
+    
     public BigDecimal getProfitMargin() { return profitMargin; }
     public void setProfitMargin(BigDecimal profitMargin) { this.profitMargin = profitMargin; }
-
-    public Timestamp getCalculatedAt() { return calculatedAt; }
+    
+    public LocalDateTime getCalculatedAt() { return calculatedAt; }
+    public void setCalculatedAt(LocalDateTime calculatedAt) { this.calculatedAt = calculatedAt; }
 }
