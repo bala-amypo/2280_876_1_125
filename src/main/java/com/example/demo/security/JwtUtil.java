@@ -1,44 +1,37 @@
-// package com.example.demo.security;
+package com.example.demo.security;
 
-// import io.jsonwebtoken.Claims;
-// import io.jsonwebtoken.Jwts;
-// import io.jsonwebtoken.SignatureAlgorithm;
-// import org.springframework.stereotype.Component;
+import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import java.util.Date;
 
-// import java.util.Date;
+@Component
+public class JwtUtil {
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
-// @Component
-// public class JwtUtil {
+    @Value("${jwt.expiration}")
+    private int jwtExpirationMs;
 
-//     private final String SECRET_KEY = "secret-key-12345";
-//     private final long EXPIRATION = 1000 * 60 * 60; // 1 hour
+    public String generateToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
 
-//     public String generateToken(String username) {
-//         return Jwts.builder()
-//                 .setSubject(username)
-//                 .setIssuedAt(new Date())
-//                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-//                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-//                 .compact();
-//     }
+    public String getUsernameFromToken(String token) {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    }
 
-//     public String extractUsername(String token) {
-//         return getClaims(token).getSubject();
-//     }
-
-//     public boolean validateToken(String token) {
-//         try {
-//             getClaims(token);
-//             return true;
-//         } catch (Exception e) {
-//             return false;
-//         }
-//     }
-
-//     private Claims getClaims(String token) {
-//         return Jwts.parser()
-//                 .setSigningKey(SECRET_KEY)
-//                 .parseClaimsJws(token)
-//                 .getBody();
-//     }
-// }
+    public boolean validateToken(String authToken) {
+        try {
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+}

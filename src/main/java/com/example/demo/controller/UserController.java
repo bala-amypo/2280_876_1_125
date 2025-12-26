@@ -60,7 +60,7 @@ public class UserController {
         User user = userService.getByEmailIgnoreCase(request.getEmail());
 
         // Generate JWT token
-        String token = jwtTokenProvider.generateToken(authentication, user);
+       String jwt = jwtTokenProvider.generateToken(authentication);
 
         // Return AuthResponse
         AuthResponse response = new AuthResponse(
