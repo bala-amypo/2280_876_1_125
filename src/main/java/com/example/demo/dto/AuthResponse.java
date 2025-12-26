@@ -15,7 +15,7 @@ public class AuthResponse {
         this.email = email;
     }
 
-    // Simple constructor with just token
+    // Simple constructor with just token (for tests)
     public AuthResponse(String token) {
         this.token = token;
     }
