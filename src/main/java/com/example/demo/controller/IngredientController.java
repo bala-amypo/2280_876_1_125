@@ -2,16 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Ingredient;
 import com.example.demo.service.IngredientService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/ingredients")
-@Tag(name = "Ingredients", description = "Ingredient management endpoints")
 public class IngredientController {
+    
     private final IngredientService ingredientService;
     
     public IngredientController(IngredientService ingredientService) {
@@ -20,26 +19,31 @@ public class IngredientController {
     
     @PostMapping
     public ResponseEntity<Ingredient> createIngredient(@RequestBody Ingredient ingredient) {
-        return ResponseEntity.ok(ingredientService.createIngredient(ingredient));
-    }
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<Ingredient> updateIngredient(@PathVariable Long id, @RequestBody Ingredient ingredient) {
-        return ResponseEntity.ok(ingredientService.updateIngredient(id, ingredient));
-    }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<Ingredient> getIngredient(@PathVariable Long id) {
-        return ResponseEntity.ok(ingredientService.getIngredientById(id));
+        Ingredient created = ingredientService.createIngredient(ingredient);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
     
     @GetMapping
     public ResponseEntity<List<Ingredient>> getAllIngredients() {
-        return ResponseEntity.ok(ingredientService.getAllIngredients());
+        List<Ingredient> ingredients = ingredientService.getAllIngredients();
+        return ResponseEntity.ok(ingredients);
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<Ingredient> getIngredientById(@PathVariable Long id) {
+        Ingredient ingredient = ingredientService.getIngredientById(id);
+        return ResponseEntity.ok(ingredient);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Ingredient> updateIngredient(@PathVariable Long id, @RequestBody Ingredient ingredient) {
+        Ingredient updated = ingredientService.updateIngredient(id, ingredient);
+        return ResponseEntity.ok(updated);
     }
     
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<Ingredient> deactivateIngredient(@PathVariable Long id) {
-        return ResponseEntity.ok(ingredientService.deactivateIngredient(id));
+    public ResponseEntity<Void> deactivateIngredient(@PathVariable Long id) {
+        ingredientService.deactivateIngredient(id);
+        return ResponseEntity.ok().build();
     }
 }
