@@ -57,4 +57,16 @@ public class UserServiceImpl implements UserService {
         );
         return jwtTokenProvider.generateToken(authentication);
     }
+    
+    @Override
+    public User getByEmailIgnoreCase(String email) {
+        return userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    }
 }
