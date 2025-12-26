@@ -8,5 +8,5 @@ public interface IngredientService {
     Ingredient updateIngredient(Long id, Ingredient ingredient);
     Ingredient getIngredientById(Long id);
     List<Ingredient> getAllIngredients();
-    Ingredient deactivateIngredient(Long id);
+    void deactivateIngredient(Long id);
 }

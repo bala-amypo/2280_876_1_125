@@ -8,5 +8,5 @@ public interface CategoryService {
     Category updateCategory(Long id, Category category);
     Category getCategoryById(Long id);
     List<Category> getAllCategories();
-    Category deactivateCategory(Long id);
+    void deactivateCategory(Long id);
 }
