@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
-import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
@@ -13,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/users")
 public class UserController {
     
     private final UserService userService;
@@ -26,17 +25,6 @@ public class UserController {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-    }
-    
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        User user = userService.register(request);
-        return ResponseEntity.ok("User registered successfully");
-    }
-    
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
-        return ResponseEntity.ok(userService.login(request));
     }
     
     @PostMapping("/signin")
@@ -62,7 +50,7 @@ public class UserController {
         return ResponseEntity.ok(authResponse);
     }
     
-    @GetMapping("/user/email/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
         User user = userService.getByEmailIgnoreCase(email);
         return ResponseEntity.ok(user);
