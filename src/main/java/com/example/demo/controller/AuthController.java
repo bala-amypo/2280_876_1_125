@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Authentication", description = "User authentication and registration")
+@Tag(name = "Authentication", description = "User authentication")
 public class AuthController {
     
     private final AuthenticationManager authenticationManager;
@@ -33,14 +33,14 @@ public class AuthController {
     }
     
     @PostMapping("/register")
-    @Operation(summary = "Register new user", description = "Register a new user account")
+    @Operation(summary = "Register new user")
     public ResponseEntity<User> register(@RequestBody RegisterRequest request) {
         User user = userService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
     
     @PostMapping("/login")
-    @Operation(summary = "User login", description = "Authenticate user and return JWT token")
+    @Operation(summary = "User login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())

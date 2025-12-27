@@ -11,8 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
     
-    private static final String SECURITY_SCHEME_NAME = "bearerAuth";
-    
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
@@ -20,11 +18,11 @@ public class OpenApiConfig {
                 .title("Menu Profitability Calculator API")
                 .version("1.0")
                 .description("API for managing menu items and calculating profitability"))
-            .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
+            .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
             .components(new Components()
-                .addSecuritySchemes(SECURITY_SCHEME_NAME, 
+                .addSecuritySchemes("bearerAuth", 
                     new SecurityScheme()
-                        .name(SECURITY_SCHEME_NAME)
+                        .name("bearerAuth")
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")
                         .bearerFormat("JWT")

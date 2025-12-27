@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.MenuItem;
 import com.example.demo.service.MenuItemService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/menu-items")
+@Tag(name = "Menu Items")
+@SecurityRequirement(name = "bearerAuth")
 public class MenuItemController {
     
     private final MenuItemService menuItemService;
@@ -25,20 +29,7 @@ public class MenuItemController {
     
     @GetMapping
     public ResponseEntity<List<MenuItem>> getAllMenuItems() {
-        List<MenuItem> menuItems = menuItemService.getAllMenuItems();
-        return ResponseEntity.ok(menuItems);
-    }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<MenuItem> getMenuItemById(@PathVariable Long id) {
-        MenuItem menuItem = menuItemService.getMenuItemById(id);
-        return ResponseEntity.ok(menuItem);
-    }
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<MenuItem> updateMenuItem(@PathVariable Long id, @RequestBody MenuItem menuItem) {
-        MenuItem updated = menuItemService.updateMenuItem(id, menuItem);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(menuItemService.getAllMenuItems());
     }
     
     @PutMapping("/{id}/deactivate")
