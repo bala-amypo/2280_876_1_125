@@ -17,7 +17,7 @@ public class JwtTokenProvider {
     
     public JwtTokenProvider() {
         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        this.validityInMs = 86400000; // 24 hours
+        this.validityInMs = 86400000;
     }
     
     public JwtTokenProvider(String secret, long validityInMs) {
