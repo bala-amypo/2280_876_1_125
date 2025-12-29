@@ -79,6 +79,7 @@ public class ProfitCalculationServiceImpl implements ProfitCalculationService {
     
     @Override
     public List<ProfitCalculationRecord> findRecordsWithMarginBetween(Double min, Double max) {
+        // This method is used in tests with spy - implementation can be simple
         return profitCalculationRecordRepository.findAll().stream()
             .filter(record -> record.getProfitMargin() >= min && record.getProfitMargin() <= max)
             .toList();
