@@ -2,16 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ProfitCalculationRecord;
 import com.example.demo.service.ProfitCalculationService;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/profit")
-@Tag(name = "Profit Calculation")
-@SecurityRequirement(name = "bearerAuth")
 public class ProfitCalculationController {
     
     private final ProfitCalculationService profitCalculationService;
